@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -53,6 +53,26 @@ class ProductDeleteAPIView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSeralizer
     #lookup_field = "pk"
+
+
+class ProductMixinView(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin, 
+    mixins.RetrieveModelMixin, 
+    generics.GenericAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSeralizer
+    lookup_field = 'pk' #you only have to declare this if you want to change that
+    
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        if pk is not None:
+            return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request,*args, **kwargs)
 
 
 #not used any more
