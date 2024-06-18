@@ -6,12 +6,11 @@ from products.models import Product
 from products.serializers import ProductSeralizer
 # Create your views here.
 
-@api_view(["GET"])
+@api_view(["POST"])
 def api_home(request, *args, **kwargs):
-    instance = Product.objects.all().order_by("?").first()
-    data = {}
-    if instance:
-        #serialization: model_instance->python dictionary
-        # data = model_to_dict(instance, fields=['id', 'title', 'price', 'sale_price'])
-        data = ProductSeralizer(instance).data
-    return Response(data)
+    serializer  = ProductSeralizer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        instance = serializer.save()
+        print(instance)
+        return Response(serializer.data)
+    return Response({"invalid": "bad data"}, status=400)
