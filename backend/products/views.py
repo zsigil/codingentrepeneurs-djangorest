@@ -23,6 +23,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(content=content)
 
 
+#not used any more
 class ProductListAPIView(generics.ListAPIView):
     '''
     not used view because we used ListCreate
@@ -37,6 +38,8 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     #lookup_field = "pk"
     
 
+
+#not used any more
 @api_view(['GET', 'POST'])
 def product_alt_view(request, pk=None, *args, **kwargs):
     method = request.method
