@@ -4,12 +4,14 @@ from .models import Product
 
 
 class ProductSeralizer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField(read_only=True)
+    update_url = serializers.SerializerMethodField(read_only=True)
+    url = serializers.HyperlinkedIdentityField(view_name='product-detail')
 
     class Meta:
         model = Product
         fields = [
             'url',
+            'update_url',
             'pk',
             'id',
             'title',
@@ -19,8 +21,8 @@ class ProductSeralizer(serializers.ModelSerializer):
             'get_discount'
         ]
 
-    def get_url(self, obj):
+    def get_update_url(self, obj):
         request = self.context.get('request')
         if request is None:
             return None
-        return reverse("product-detail", kwargs={"pk":obj.pk}, request=request)
+        return reverse("product-update", kwargs={"pk":obj.pk}, request=request)
