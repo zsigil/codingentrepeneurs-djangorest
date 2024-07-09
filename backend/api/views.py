@@ -11,6 +11,6 @@ def api_home(request, *args, **kwargs):
     serializer  = ProductSeralizer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         instance = serializer.save()
-        print(instance)
+        # print(instance)
         return Response(serializer.data)
     return Response({"invalid": "bad data"}, status=400)
