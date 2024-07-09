@@ -2,14 +2,14 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from .models import Product
-from .validators import validate_title
+from . import validators
 
 class ProductSeralizer(serializers.ModelSerializer):
     update_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
 
     email = serializers.EmailField(write_only=True) #won't show up in list, but can be added at creation
-    title = serializers.CharField(validators=[validate_title])
+    title = serializers.CharField(validators=[validators.unique_product_title])
 
     class Meta:
         model = Product
