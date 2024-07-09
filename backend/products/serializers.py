@@ -7,11 +7,14 @@ class ProductSeralizer(serializers.ModelSerializer):
     update_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
 
+    email = serializers.EmailField(write_only=True) #won't show up in list, but can be added at creation
+
     class Meta:
         model = Product
         fields = [
             'url',
             'update_url',
+            'email',
             'pk',
             'id',
             'title',
@@ -20,6 +23,12 @@ class ProductSeralizer(serializers.ModelSerializer):
             'sale_price',
             'get_discount'
         ]
+
+    def create(self, validated_data):
+        email = validated_data.pop('email')
+        obj = super().create(validated_data)
+        # print(email, obj)
+        return obj
 
     def get_update_url(self, obj):
         request = self.context.get('request')
