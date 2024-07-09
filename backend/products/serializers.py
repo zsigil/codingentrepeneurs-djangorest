@@ -24,6 +24,14 @@ class ProductSeralizer(serializers.ModelSerializer):
             'get_discount'
         ]
 
+    def validate_title(self, value): #validate_<field_name>
+        qs = Product.objects.filter(title__iexact=value)
+        if qs.exists():
+            raise serializers.ValidationError(f"Title '{value}' already exists")
+        return value
+
+
+
     def create(self, validated_data):
         #we do not do anything, just call super
         obj = super().create(validated_data)
