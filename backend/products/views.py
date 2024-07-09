@@ -16,8 +16,10 @@ class ProductListCreateAPIView(StaffEditorPermissionMixin,generics.ListCreateAPI
 
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
-        print(serializer.validated_data)
+        #print(serializer.validated_data)
         # adding data through serializer 
+        email = serializer.validated_data.pop('email')  #email is not in the model!, we have to pop
+        print(email)
         title = serializer.validated_data.get('title')
         content = serializer.validated_data.get('content') or None
         if content is None:

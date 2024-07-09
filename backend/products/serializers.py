@@ -25,9 +25,8 @@ class ProductSeralizer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        email = validated_data.pop('email')
+        #we do not do anything, just call super
         obj = super().create(validated_data)
-        # print(email, obj)
         return obj
 
     def get_update_url(self, obj):
