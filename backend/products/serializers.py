@@ -10,13 +10,15 @@ class ProductSeralizer(serializers.ModelSerializer):
 
     email = serializers.EmailField(write_only=True) #won't show up in list, but can be added at creation
     title = serializers.CharField(validators=[validators.unique_product_title])
-
+    name = serializers.CharField(source='title', read_only=True) #identical field to title
+    
     class Meta:
         model = Product
         fields = [
             'url',
             'update_url',
             'email',
+            'name',
             'pk',
             'id',
             'title',
