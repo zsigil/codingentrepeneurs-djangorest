@@ -4,13 +4,13 @@ from rest_framework.decorators import api_view
 
 from django.shortcuts import get_object_or_404
 
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import StaffEditorPermissionMixin, UserQuerySetMixin
 
 from .models import Product
 from .serializers import ProductSeralizer
 
 
-class ProductListCreateAPIView(StaffEditorPermissionMixin,generics.ListCreateAPIView):
+class ProductListCreateAPIView(StaffEditorPermissionMixin,UserQuerySetMixin, generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSeralizer
 
@@ -26,13 +26,13 @@ class ProductListCreateAPIView(StaffEditorPermissionMixin,generics.ListCreateAPI
             content = title
         serializer.save(user=self.request.user, content=content)
 
-    def get_queryset(self, *args, **kwargs):
-        qs = super().get_queryset(*args, **kwargs)
-        request = self.request
-        user = request.user
-        if not user.is_authenticated:
-            return Product.objects.none()
-        return qs.filter(user=user)
+    # def get_queryset(self, *args, **kwargs):
+    #     qs = super().get_queryset(*args, **kwargs)
+    #     request = self.request
+    #     user = request.user
+    #     if not user.is_authenticated:
+    #         return Product.objects.none()
+    #     return qs.filter(user=user)
     
 
 #not used any more
