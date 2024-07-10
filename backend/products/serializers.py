@@ -1,10 +1,13 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from api.serializers import UserPublicSerializer
 from .models import Product
 from . import validators
 
 class ProductSeralizer(serializers.ModelSerializer):
+    # user = UserPublicSerializer(read_only=True)
+    owner = UserPublicSerializer(source='user', read_only=True)
     update_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
 
@@ -15,7 +18,8 @@ class ProductSeralizer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            # 'user',
+            'owner',
+            # 'user', #user_id
             'url',
             'update_url',
             'email',
